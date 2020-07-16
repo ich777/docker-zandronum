@@ -33,11 +33,14 @@ if [ ! -d ${DATA_DIR}/wads ]; then
 fi
 export DOOMWADDIR=/zandronum/wads
 if [ -z "$(find ${DATA_DIR}/wads -iname *.wad)" ]; then
-	echo "--------------------------------------------------"
-	echo "---No 'wads' found, please be sure to put it in---"
-	echo "------the '/wads' folder located in the main------"
-	echo "----directory, putting server into sleep mode-----"
-	echo "--------------------------------------------------"
+	echo "---------------------------------------------------------------------------"
+	echo "---No 'wads' found, please be sure to put your wad files in the '/wads'----"
+	echo "---folder located in the main directory, putting server into sleep mode!---"
+	echo "---------------------------------------------------------------------------"
+	echo "----If you put more files in this folder you have to specify which file----"
+	echo "-----the server should load and you have to append the GAME_PARAMS eg:-----"
+	echo "-----'-iwad DOOM2.WAD' please not that the wad file is case sensitive!-----"
+	echo "---------------------------------------------------------------------------"
 	sleep infinity
 fi
 chmod -R ${DATA_PERM} ${DATA_DIR}
