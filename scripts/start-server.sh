@@ -45,4 +45,4 @@ chmod -R ${DATA_PERM} ${DATA_DIR}
 
 echo "---Starting Server---"
 cd ${DATA_DIR}
-LD_LIBRARY_PATH=. && ${DATA_DIR}/zandronum-server ${GAME_PARAMS}
+LD_LIBRARY_PATH=${DATA_DIR} ${DATA_DIR}/zandronum-server ${GAME_PARAMS}
