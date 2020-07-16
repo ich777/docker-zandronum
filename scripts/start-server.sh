@@ -18,7 +18,7 @@ fi
 
 echo "---Preparing Server---"
 if [ ! -f ${DATA_DIR}/server.cfg ]; then
-	echo "---No 'server.cfg'found, downloading...---"
+	echo "---No 'server.cfg' found, downloading...---"
 	cd ${DATA_DIR}
 	if wget -q -nc --show-progress --progress=bar:force:noscroll https://github.com/ich777/docker-zandronum/raw/master/cfg/server.cfg ; then
 		echo "---Successfully downloaded 'server.cfg'---"
@@ -27,6 +27,23 @@ if [ ! -f ${DATA_DIR}/server.cfg ]; then
 	fi
 else
 	echo "---'server.cfg' found, continuing!---"
+fi
+if [ ! -f ${DATA_DIR}/GeoIP.dat ]; then
+	echo "---No 'GeoIP.dat' found, downloading...---"
+	cd ${DATA_DIR}
+	if wget -q -nc --show-progress --progress=bar:force:noscroll https://github.com/ich777/docker-zandronum/raw/master/geo/GeoLite2.tar.gz ; then
+		echo "---Successfully downloaded 'GeoIP.dat'---"
+	else
+		echo "---Can't download 'GeoIP.dat', continuing!---"
+	fi
+	if [ -d ${DATA_DIR}/GeoLite2License ]; then
+		mkdir -p ${DATA_DIR}/GeoLite2License
+	fi
+	tar -C ${DATA_DIR}/GeoLite2License --strip-components=1 -xf ${DATA_DIR}/GeoLite2.tar.gz
+	rm ${DATA_DIR}/GeoLite2.tar.gz
+	mv ${DATA_DIR}/GeoLite2License/GeoLite2-Country.mmdb ${DATA_DIR}/GeoIP.dat
+else
+	echo "---'GeoIP.dat' found, continuing!---"
 fi
 if [ ! -d ${DATA_DIR}/wads ]; then
 	mkdir -p ${DATA_DIR}/wads
