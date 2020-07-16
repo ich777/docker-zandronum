@@ -36,7 +36,7 @@ if [ ! -f ${DATA_DIR}/GeoIP.dat ]; then
 	else
 		echo "---Can't download 'GeoIP.dat', continuing!---"
 	fi
-	if [ -d ${DATA_DIR}/GeoLite2License ]; then
+	if [ ! -d ${DATA_DIR}/GeoLite2License ]; then
 		mkdir -p ${DATA_DIR}/GeoLite2License
 	fi
 	tar -C ${DATA_DIR}/GeoLite2License --strip-components=1 -xf ${DATA_DIR}/GeoLite2.tar.gz
