@@ -9,15 +9,15 @@ ATTENTION: You have to place your wad files into the '/wads' folder to complete 
 ## Env params
 | Name | Value | Example |
 | --- | --- | --- |
-| GAME_PARAMS | Startup game parameters | -port 10660 +exec server.cfg |
+| GAME_PARAMS | Startup game parameters | -port 10666 +exec server.cfg |
 | UID | User Identifier | 99 |
 | GID | Group Identifier | 100 |
 
 ## Run example
 ```
 docker run --name Zandronum -d \
-	-p 10660:10660/udp \
-	--env 'GAME_PARAMS=-port 10660 +exec server.cfg' \
+	-p 10666:10666/udp \
+	--env 'GAME_PARAMS=-port 10666 +exec server.cfg' \
 	--env 'UID=99' \
 	--env 'GID=100' \
 	--volume /mnt/cache/appdata/zandronum:/zandronum \
