@@ -1,9 +1,22 @@
 #!/bin/bash
-echo "---Checking if Zandronum Server is installed---"
-if [ ! -f ${DATA_DIR}/zandronum-server ]; then
+LAT_V="$(wget -qO- https://zandronum.com/downloads/ | grep "linux-x86_64.tar.bz2" | cut -d '"' -f8 | cut -d '-' -f1 | sed 's/zandronum//g' | sort -V | tail -1)"
+CUR_V="$(LD_LIBRARY_PATH=${DATA_DIR} ./zandronum-server --version 2>/dev/null | cut -d '-' -f1 | head -1)"
+
+if [ -z "$LAT_V" ]; then
+	if [ ! -z "$CUR_V" ]; then
+		echo "---Can't get latest version from Zandronum falling back to v$CUR_V---"
+		LAT_V="$CUR_V"
+	else
+		echo "---Something went wrong, can't get latest version from Zandronum, putting container into sleep mode---"
+		sleep infinity
+	fi
+fi
+
+echo "---Version Check---"
+if [ -z "$CUR_V" ]; then
 	echo "---Zandronum Server not found, downloading!---"
 	cd ${DATA_DIR}
-	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/zandronum.tar.bz2 https://zandronum.com/downloads/zandronum3.0-linux-x86_64.tar.bz2 ; then
+	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/zandronum.tar.bz2 https://zandronum.com/downloads/zandronum${LAT_V}-linux-x86_64.tar.bz2 ; then
 		echo "---Successfully downloaded Zandronum Server---"
 	else
 		echo "---Download of Zandronum Server failed, putting container into sleep mode!---"
@@ -12,8 +25,20 @@ if [ ! -f ${DATA_DIR}/zandronum-server ]; then
 	tar -xvf ${DATA_DIR}/zandronum.tar.bz2
 	rm ${DATA_DIR}/zandronum.tar.bz2
 	chmod +x ${DATA_DIR}/zandronum-server
-else
-	echo "---Zandronum found, continuing!---"
+elif [ "$CUR_V" != "$LAT_V" ]; then
+	echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
+	cd ${DATA_DIR}
+	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/zandronum.tar.bz2 https://zandronum.com/downloads/zandronum${LAT_V}-linux-x86_64.tar.bz2 ; then
+		echo "---Successfully downloaded Zandronum Server---"
+	else
+		echo "---Download of Zandronum Server failed, putting container into sleep mode!---"
+	sleep infinity
+	fi
+	tar -xvf ${DATA_DIR}/zandronum.tar.bz2
+	rm ${DATA_DIR}/zandronum.tar.bz2
+	chmod +x ${DATA_DIR}/zandronum-server
+elif [ "$CUR_V" == "$LAT_V" ]; then
+	echo "---Zandronum v$CUR_V up-to-date---"
 fi
 
 echo "---Preparing Server---"
