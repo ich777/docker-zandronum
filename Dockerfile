@@ -3,7 +3,7 @@ FROM ich777/debian-baseimage
 LABEL maintainer="admin@minenet.at"
 
 RUN apt-get update && \
-	apt-get -y install --no-install-recommends bzip2 libsdl-net1.2 && \
+	apt-get -y install --no-install-recommends bzip2 libsdl-net1.2 libjpeg62-turbo && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV DATA_DIR=/zandronum
