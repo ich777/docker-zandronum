@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ${DATA_DIR}
-LAT_V="$(wget -qO- https://zandronum.com/downloads/ | grep "linux-x86_64.tar.bz2" | cut -d '"' -f8 | cut -d '-' -f1 | sed 's/zandronum//g' | sort -V | tail -1)"
+LAT_V="$(wget -qO- https://zandronum.com/downloads/ | grep "linux-x86_64.tar.bz2" | cut -d '=' -f2 | cut -d '"' -f2 | sed 's/zandronum//g' | cut -d '-' -f1 | sort -V | tail -1)"
 CUR_V="$(LD_LIBRARY_PATH=${DATA_DIR} ${DATA_DIR}/zandronum-server --version 2>/dev/null | cut -d '-' -f1 | head -1)"
 
 if [ -z "$LAT_V" ]; then
